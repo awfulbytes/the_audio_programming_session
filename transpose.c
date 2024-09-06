@@ -8,8 +8,9 @@ int mod12(int note) {
 }
 
 
-int main() {
-    char note[3], **p1, **p2,
+int main(int argc, char** argv) {
+    char
+        note[3], **p1, **p2,
         *table[12] = {"C", "C#", "D", "D#",
                     "E", "F", "F#", "G",
                     "G#", "A", "A#", "B"};
@@ -27,8 +28,7 @@ int main() {
             printf("\nCould not match %s with any known note\n", note);
             printf("We represent notes in an octave as: \n");
 
-            int i;
-            for (i=0; i <= 11; i++)
+            for (int i=0; i <= 11; i++)
                 printf("%s  ", table[i]);
             return 1;
         }
