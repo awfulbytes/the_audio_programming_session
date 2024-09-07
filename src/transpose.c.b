@@ -8,7 +8,7 @@ int mod12(int note) {
 }
 
 
-int main(int argc, char** argv) {
+int transp(int argc, char** argv) {
     char
         note[3], **p1, **p2,
         *table[12] = {"C", "C#", "D", "D#",

@@ -1,44 +1,10 @@
+#include <stdio.h>
 #include "nscale.h"
-
-int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        printf("usage: ./nscale notes_quant_per_OCT midinote_code\n");
-        printf("usage: ________ ----1 ...... 24---- ____0-127____\n");
-        return 1;
-    }
-
-    int notes, midinote;
-
-    notes = atoi(argv[1]);
-
-    if (notes < 1) {
-        printf("Error: Notes number must be positive and bigger than 0\n");
-        return 1;
-    }
-
-    if (notes > 24) {
-        printf("Error: Notes number must be at max = 24\n");
-        return 1;
-    }
-
-    midinote = atoi(argv[2]);
-
-    if (midinote < 0) {
-        printf("Error: Cannot have negative Midi Notes!\n");
-        return 1;
-    }
-
-    if (midinote > 127) {
-        printf("Error: Maximum Midi Note is 127\n");
-        return 1;
-    }
-
-    scaler(notes, midinote);
-    return 0;
-}
 
 void zero_filler(double buffer[1024]){
     // NOTE: the best way to fill a buffer with zeros
+    // NOTE: This would be read as ‘‘set the contents of ptr to 0.0, then
+    // increment ptr.’’
     double* ptr;
     for (int i = 0; i < 1024; i++)
         *ptr++ =0.0;

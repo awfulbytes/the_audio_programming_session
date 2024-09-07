@@ -7,7 +7,7 @@ int mod12(int note) {
     return note;
 }
 
-int main(int argc, char** argv) {
+int serma(int argc, char** argv) {
     int series[12][12], offset;
     int n, m, i;
     char* table[12] = {"C", "Db", "D", "Eb",

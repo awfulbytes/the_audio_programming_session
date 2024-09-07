@@ -4,7 +4,7 @@
 
 int low_A = 440.0/2.0;
 
-int main() {
+int midi2freq() {
     // middle C5 and base note (below human hearing)
     double c0, c5;
     int    midinote;

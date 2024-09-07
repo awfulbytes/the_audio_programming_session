@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-int main() {
+void freq2midi() {
     double c0, c5;
     int    midinote;
     // NOTE: 12 note octave tunning
