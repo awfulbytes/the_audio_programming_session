@@ -37,6 +37,13 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+void zero_filler(double buffer[1024]){
+    // NOTE: the best way to fill a buffer with zeros
+    double* ptr;
+    for (int i = 0; i < 1024; i++)
+        *ptr++ =0.0;
+}
+
 void scaler(int notes_amount, int midi_note) {
     double frequency, ratio;
     double c0, c5;
