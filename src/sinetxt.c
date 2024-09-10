@@ -10,12 +10,12 @@ void sintxt(int nsamps, double freq, double srate){
     double sampl;
     double twopi = 2.0 * M_PI;
     double angleincrmnt;
+    angleincrmnt = twopi * freq / srate;
 
-    angleincrmnt = twopi * (freq / srate);
     #ifdef DEBUG
     printf("two*pi = %lf\t", twopi);
-    printf("freque = %lf\t", freq);
-    printf("sampling rate = %lf\n", srate);
+    printf("freq = %lf\t", freq);
+    printf("samprate = %lf\n", srate);
     #endif
 
     for (i = 0; i < nsamps; i++){
