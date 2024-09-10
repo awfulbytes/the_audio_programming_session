@@ -1,20 +1,16 @@
-#include "expdecay.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
+
+#include "sinetxt.h"
 
 int main(int argc, char** argv) {
 
-    if (argc < 4) {
-        printf("usage: <bin_name> <duration> <T> <steps>\n");
+    if(argc != ARG_NARGS) {
+        fprintf(stderr, "Usage: <bin_name> <nsamps> <freq> <srate>\n");
         return 1;
     }
 
-    /* dur    = atof(argv[1]); */
-    /* T      = atof(argv[2]); */
-    /* NOTE: steps are always int values bruh */
-    /* nsteps = atoi(argv[3]); */
-
-    expdecay(atof(argv[1]),  atof(argv[2]), atoi(argv[3]));
-    return 0;
+    /* sintxt(atoi(argv[1]), atof(argv[2]), atof(argv[3])); */
+    sintxt(atoi(argv[ARG_NSAMPS]), atof(argv[ARG_FREQ]), atof(argv[ARG_SR]));
+    return 1;
 }
