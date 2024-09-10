@@ -23,7 +23,7 @@ bin_info: $(TARGET)
 	@exec readelf -h bin/test
 
 $(TARGET): $(OBJ)
-	gcc -o $@ $? -lm
+	gcc -static -o $@ $? -lm
 
 obj/%.o: src/%.c
 	gcc -c $< -o $@ -Iinc -Wno-implicit-function-declaration
