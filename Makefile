@@ -26,5 +26,5 @@ $(TARGET): $(OBJ)
 	gcc -static -o $@ $? -lm
 
 obj/%.o: src/%.c
-	gcc -c $< -o $@ -Iinc -Wno-implicit-function-declaration
+	gcc -c $< -o $@ -Iinc -Wno-implicit-function-declaration -g
 # end
