@@ -3,6 +3,19 @@
 
 #include "expdecay.h"
 
+/**
+* Creating an exponential decay curve.
+*
+* Using pure math logic to generate the points of an exponential decay function
+* from 0 to 1 (normalized values).
+*
+** double dur The duration in seconds of the decay.
+** double T   The period i thing ... TODO: see what the hell is that.
+** int nsteps The number of points consisting the curve (resolution).
+*
+* @return Just print to stdout the values (usefull for creating breakpoint
+*         files)
+*/
 void expdecay(double dur, double T, int nsteps){
     int i;
 
