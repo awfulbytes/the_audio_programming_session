@@ -13,6 +13,9 @@ NOC_BLD := \033[1;0m
 
 default: $(TARGET)
 
+bear:
+	make clean
+	bear -- make
 clean:
 	rm -rf obj/*.o
 	rm -rf bin/*
