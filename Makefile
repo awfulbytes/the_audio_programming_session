@@ -26,8 +26,8 @@ bin_info: $(TARGET)
 	@exec readelf -h bin/test
 
 $(TARGET): $(OBJ)
-	gcc -static -o $@ $? -lm
+	gcc -o $@ $? -lm -lportsf
 
 obj/%.o: src/%.c
-	gcc -c $< -o $@ -Iinc -Wno-implicit-function-declaration -g
+	gcc -c $< -o $@ -Iinc -Iventor/include -Iventor/portsf -Wno-implicit-function-declaration -g -Wall
 # end
