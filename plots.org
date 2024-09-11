@@ -1,0 +1,13 @@
+#+title: Plots
+
+* gnuplot
+#+begin_src gnuplot :exports code :file graphs/test1Plotted.png
+reset
+set xlabel "number of sample"
+set xrange [0:250]
+set xticks 1, 0.1, 250
+plot "test1.txt" with impulses
+#+end_src
+
+#+RESULTS:
+[[file:graphs/test1Plotted.png]]
