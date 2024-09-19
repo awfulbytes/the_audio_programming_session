@@ -1,22 +1,15 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef M_PI
-#define twopi             (2 * M_PI)
-#endif
 
 #include "oscB.h"
 
-typedef struct oscb {
-    double twopiovrsr; /*< Hold constant value. */
-    double curfreq;
-    double curphase;
-    double incr;
-} oscb_t;
+typedef double (*tickfunc)(oscb_t *osc, double);
 
-oscb_t *new_oscil(unsigned long srate){
+
+oscb_t* new_oscil(unsigned long srate){
     oscb_t *p_osc;
-    p_osc = (oscb_t *) malloc(sizeof(oscb_t));
+    p_osc = (oscb_t *) malloc(sizeof(*p_osc));
 
     if (p_osc == ((void *)0))
       return NULL;
@@ -34,7 +27,7 @@ oscb_t *new_oscil(unsigned long srate){
  * This function allocates memory for the oscillator so the user is responsible
  * **to clear** the memory on the heap.
  */
-oscb_t *oscB(void){
+oscb_t* oscB(void){
     oscb_t *osc = (oscb_t *) malloc(sizeof(oscb_t));
 
     if (osc == ((void *)0))
