@@ -1,10 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #include "oscB.h"
-
-typedef double (*tickfunc)(oscb_t *osc, double);
 
 
 oscb_t* new_oscil(unsigned long srate){
