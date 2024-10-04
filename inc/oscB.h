@@ -3,9 +3,9 @@
 #define M_PI              (3.14159265358979323846)
 #endif
 
-#define twopi             (2 * M_PI)
 #endif
 
+#define twopi             (2 * M_PI)
 
 typedef struct _oscb {
     double twopiovrsr; /*< Hold constant value. */

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "brkpnt.h"
 
@@ -38,7 +37,7 @@ brkpnt_t* get_brkpnts(FILE* fp, long* psize){
         if (++npoints == size) {
             brkpnt_t* tmp;
             size += npoints;
-            tmp = (brkpnt_t*)realloc(points, sizeof(brkpnt_t) *size);
+            tmp = (brkpnt_t*)realloc(points, sizeof(brkpnt_t) * size);
             if (tmp == NULL) {
                 // NOTE: this state is very bad
                 // and we should return NULL to caller.
