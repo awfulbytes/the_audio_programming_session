@@ -7,6 +7,7 @@
 TARGET	= bin/test
 SRC 	= $(wildcard src/*.c)
 OBJ 	= $(patsubst src/%.c, obj/%.o, $(SRC))
+FZOBJ 	= $(patsubst src/%.c, fzobj/%.o, $(SRC))
 
 RED_BLD := \033[1;31m
 NOC_BLD := \033[1;0m
@@ -18,6 +19,7 @@ bear:
 	bear -- make
 clean:
 	rm -rf obj/*.o
+	rm -rf fzobj/*.o
 	rm -rf bin/*
 
 bin_info: $(TARGET)
@@ -31,3 +33,8 @@ $(TARGET): $(OBJ)
 obj/%.o: src/%.c
 	gcc -c $< -o $@ -Iinc -Iventor/include -Iventor/portsf -Wno-implicit-function-declaration -g -Wall
 # end
+
+debug_fuzz: $(FZOBJ)
+	afl-clang-fast -o $@ $? -lm
+fzobj/%.o: src/%.c
+	afl-clang-fast -c $< -o $@ -Iinc -Iventor/include -Iventor/portsf -Wno-implicit-function-declaration -g -Wall
