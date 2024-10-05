@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <portsf.h>
+#include <time.h>
 
 #include "oscB.h"
 #define DEBUG         -DDEBUG
@@ -31,6 +32,7 @@ int main(int argc, char *argv[]) {
   // NOTE:: make this fuzzable
   fprintf(stderr, "Give a number for samples: \n");
   scanf("%d", &nsamps);
+
   // NOTE:: make an oscilator bank......
   oscb_t **osc = NULL;
   double *osc_freqs = NULL, *osc_amps = NULL;
@@ -70,6 +72,10 @@ int main(int argc, char *argv[]) {
       goto exit;
     }
   }
+
+  clock_t startt, endt;
+
+  startt = clock();
 
   // NOTE::
   //        making a lookup table for a sine wave of 1024 length
@@ -113,4 +119,8 @@ int main(int argc, char *argv[]) {
   }
   if (*osc)
     free(osc);
+
+  endt = clock();
+  double elapsed = (endt - startt) / (double) CLOCKS_PER_SEC;
+  fprintf(stderr, "Time to procces was: %ld [ms]\n", endt/100000);
 }
