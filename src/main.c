@@ -13,28 +13,31 @@
 
 #define DEFAULT_WINDOW_MSECS        (0xf)
 
-enum { arg_progname, arg_samples, arg_srate, arg_amp, arg_freq,
-        arg_nargs };
+/* enum { arg_progname, arg_samples, arg_srate, arg_amp, arg_freq, */
+/*         arg_nargs }; */
 
 int main(int argc, char *argv[]) {
   int error = 0;
+  int nsamps;
 
-  if (argc < arg_nargs){
+  /* if (argc < arg_nargs){ */
 
-    argc -= 1;
+  /*   argc -= 1; */
 
-    #ifdef DEBUG
-    fprintf(stderr, "Error: Not enough arguments.\nYou gave %d instead of %d\n", argc, arg_nargs - 1);
-    #endif
-  }
+  /*   #ifdef DEBUG */
+  /*   fprintf(stderr, "Error: Not enough arguments.\nYou gave %d instead of %d\n", argc, arg_nargs - 1); */
+  /*   #endif */
+  /* } */
+  // NOTE:: make this fuzzable
+  fprintf(stderr, "Give a number for samples: \n");
+  scanf("%d", &nsamps);
   // NOTE:: make an oscilator bank......
   oscb_t **osc = NULL;
   double *osc_freqs = NULL, *osc_amps = NULL;
   unsigned long nosc;
-  int nsamps = atoi(argv[arg_samples]);
   double outframe[nsamps];
 
-  nosc = atoi(argv[arg_samples]);
+  nosc = nsamps;
 
   osc_amps = (double *) malloc(sizeof(double) * nosc);
   if (osc_amps == NULL) {
@@ -77,8 +80,8 @@ int main(int argc, char *argv[]) {
   //        the array has one cycle because TBLLEN == twopi
   for (i = 0; i < TBLLEN; i++) {
     table[i] = sin(step * i);
-    fprintf(stdout, "%lu\t%lf\n", i, table[i]);
   }
+  /* fprintf(stdout, "%d\t%lf\n", TBLLEN, table[TBLLEN-1]); */
 
   // NOTE::
   //        truncting loop
@@ -95,7 +98,7 @@ int main(int argc, char *argv[]) {
     while (curphase < tablen) {
       curphase += tablen;
     }
-    printf("Some signal: %lf\n", table[i]);
+    printf("%lu\t%lf\n", i, table[i]);
   }
 
   exit:
