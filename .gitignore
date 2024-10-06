@@ -1,10 +1,18 @@
-.DS_Store
-.idea
 *.log
 .cache
+*.wav
+*.mp3
 
 obj
 *test*
 
 notes*
 *.json
+
+
+core.*
+vgcore.*
+
+in
+out
+*fuzz*
