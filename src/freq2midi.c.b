@@ -19,4 +19,4 @@ void freq2midi() {
     printf("Nearest MIDI note to %f [Hz] is %d\n", freq, midinote);
 }
 
-// TODO: EXERSISE 1.2.5 is nice @p104 The Audio Programming Book
+// TODO1: EXERSISE 1.2.5 is nice @p104 The Audio Programming Book

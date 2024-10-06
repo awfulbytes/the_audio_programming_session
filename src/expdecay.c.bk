@@ -10,7 +10,7 @@
 * from 0 to 1 (normalized values).
 *
 ** double dur The duration in seconds of the decay.
-** double T   The period i thing ... TODO: see what the hell is that.
+** double T   The period i thing ... TODO1: see what the hell is that.
 ** int nsteps The number of points consisting the curve (resolution).
 *
 * @return Just print to stdout the values (usefull for creating breakpoint
