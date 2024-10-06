@@ -2,6 +2,7 @@
  ** main.c :
 *          the entry point of all
 *******************************************************************************/
+#include <limits.h>
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
@@ -23,7 +24,7 @@
 
 int main(int argc, char *argv[]) {
   int error = 0;
-  int nsamps;
+  unsigned int nsamps;
   unsigned long nosc;
 
   /* if (argc < arg_nargs){ */
@@ -37,7 +38,17 @@ int main(int argc, char *argv[]) {
 
   // NOTE:: make this fuzzable
   fprintf(stderr, "Give a number for samples: \n");
-  scanf("%d", &nsamps);
+  scanf("%iu", &nsamps);
+
+  // NOTE:: should scan for negatives also and handle those shit... thnx fuzzer
+  if ((int) nsamps <= 0) {
+    fprintf(stderr, "The number should be possitive: %d\n", nsamps);
+    return -1;
+  } else if (nsamps > INT_MAX) {
+    fprintf(stderr, "That is a big ass number the limit of the numbers posible to handle are %d\n",
+           INT_MAX);
+    return -1;
+  }
 
   // NOTE:: make this fuzzable
   /* fprintf(stderr, "Give a number for oscilators in the bank: \n"); */
