@@ -35,7 +35,7 @@ oscb_t* oscB(void){
 double sinetick(oscb_t *p_osc, double freq){
     double val;
 
-    val = sin(p_osc->curphase);
+    val = sinf(p_osc->curphase);
     if (p_osc->curfreq != freq){
         p_osc->curfreq = freq;
         p_osc->incr = p_osc->twopiovrsr * freq;

@@ -1,23 +1,23 @@
 /*******************************************************************************
  ** main.c :
-*          the entry point of all
-*******************************************************************************/
+ *          the entry point of all
+ *******************************************************************************/
+#include <assert.h>
 #include <limits.h>
 #include <math.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <portsf.h>
+/* #include <portsf.h> */
 #include <time.h>
 
-#include "siggen.h"
 #include "oscB.h"
-#define DEBUG         -DDEBUG
-/* #define MEMORY__DEBUG -DDEBUG */
-#define TBLLEN        (1024)
-#define DEFSFR        (44100)
+#include "siggen.h"
 
-#define DEFAULT_WINDOW_MSECS        (0xf)
+#define DEBUG -DDEBUG
+/* #define MEMORY__DEBUG               -DDEBUG */
+#define TBLLEN (1024)
+#define DEFSFR (44100)
+#define DEFAULT_WINDOW_MSECS (0xf)
 
 /* enum { arg_progname, arg_samples, arg_srate, arg_amp, arg_freq, */
 /*         arg_nargs }; */
@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
   /*   argc -= 1; */
 
   /*   #ifdef DEBUG */
-  /*   fprintf(stderr, "Error: Not enough arguments.\nYou gave %d instead of %d\n", argc, arg_nargs - 1); */
+  /*   fprintf(stderr, "Error: Not enough arguments.\nYou gave %d instead of
+   * %d\n", argc, arg_nargs - 1); */
   /*   #endif */
   /* } */
 
@@ -41,12 +42,14 @@ int main(int argc, char *argv[]) {
   scanf("%iu", &nsamps);
 
   // NOTE:: should scan for negatives also and handle those shit... thnx fuzzer
-  if ((int) nsamps <= 0) {
-    fprintf(stderr, "The number should be possitive: %d\n", nsamps);
+  if ((int)nsamps <= 0) {
+    fprintf(stderr, "The number should be possitive i.e. > 0: %d\n", nsamps);
     return -1;
   } else if (nsamps > INT_MAX) {
-    fprintf(stderr, "That is a big ass number the limit of the numbers posible to handle are %d\n",
-           INT_MAX);
+    fprintf(stderr,
+            "That is a big ass number the limit of the numbers posible to "
+            "handle are %d\n",
+            INT_MAX);
     return -1;
   }
 
@@ -61,43 +64,85 @@ int main(int argc, char *argv[]) {
   double *osc_freqs = NULL, *osc_amps = NULL;
   /* double outframe[nsamps]; */
 
-  osc_amps = (double *) malloc(sizeof(double) * nosc);
+  osc_amps = (double *)malloc(sizeof(double) * nosc);
   if (osc_amps == NULL) {
     puts("Memory for the amplitute array failed.\n");
     error++;
     goto exit;
   }
 
-  osc_freqs = (double *) malloc(sizeof(double) * nosc);
+  osc_freqs = (double *)malloc(sizeof(double) * nosc);
   if (osc_freqs == NULL) {
     puts("Memory for the frequency array failed.\n");
     error++;
     goto exit;
   }
 
-  osc = (oscb_t **) malloc(sizeof(oscb_t *) * nosc);
+  osc = (oscb_t **)malloc(sizeof(oscb_t *) * nosc);
   if (osc == NULL) {
     puts("Memory for the oscilator bank array failed.\n");
     error++;
     goto exit;
   }
 
+  double dur = (double)nosc / (double)DEFSFR;
+  fprintf(stderr, "duration in seconds: %lf\n", dur);
+  double **sigbuf = NULL;
+  double **time = NULL;
+
+  sigbuf = (double **)malloc(sizeof(double *) * nosc);
+  if (sigbuf == NULL) {
+    puts("No sigbuf meeeeeem");
+    error++;
+    goto exit;
+  }
+  time = (double **)malloc(sizeof(double *) * nosc);
+  if (time == NULL) {
+    puts("No time meeeeeem");
+    error++;
+    goto exit;
+  }
+
+  fprintf(stderr, "Size of double: %zu bytes\n", sizeof(double));
+  fprintf(stderr, "we fuck the first for");
   // NOTE::
-  //        Initializing all the oscillators
+  //        Initializing all the oscillators and corresponding time
+  //        oscilation...???
   for (int i = 0; i < nosc; i++) {
-    osc[i] = new_oscil(DEFSFR);
+    if (nosc > DEFSFR) {
+      osc[i] = new_oscil(DEFSFR);
+      time[i] = (double *)new_oscil(nosc);
+      sigbuf[i] = (double *)new_oscil(nosc);
+    } else {
+      osc[i] = new_oscil(DEFSFR);
+      time[i] = (double *)new_oscil(DEFSFR);
+      sigbuf[i] = (double *)new_oscil(DEFSFR);
+    }
+
     if (osc[i] == NULL) {
       puts("No memory for oscillators\n");
       error++;
       goto exit;
     }
-    #ifdef MEMORY__DEBUG
+    if (time[i] == NULL) {
+      puts("No memory for time array buffer\n");
+      error++;
+      goto exit;
+    }
+    if (sigbuf[i] == NULL) {
+      puts("No memory for signal array buffer\n");
+      error++;
+      goto exit;
+    }
+
+#ifdef MEMORY__DEBUG
     /* fprintf(stderr, "%d\t%lf\n", i, *osc[i]); */
-    fprintf(stderr, "%pt\n", osc[i]);
-    /* assert(*osc[i]-> == 0.0); */
-    #endif
+    /* fprintf(stderr, "%pt\n", osc[i]); */
+    fprintf(stderr, "%lu\n", sizeof(*osc[i]));
+#endif
   }
 
+  /* assert(*osc != NULL); */
   clock_t startt, endt;
 
   startt = clock();
@@ -108,14 +153,31 @@ int main(int argc, char *argv[]) {
   //        user gave... this is bad idea i have to determine the exact amount
   //        of samples via the Niquist theorem of sf and aliasing... I see a lot
   //        now...
-  double dur = (double) nosc / (double) DEFSFR;
-  fprintf(stderr, "duration in seconds: %lf\n", dur);
-  double sigbuf[DEFSFR];
-  for (int i = 0; i < nosc; i++){
-    /* double some =  sinetick(osc[i], 200.0); */
-    sigbuf[i] = sinetick(*osc, 200);
-    fprintf(stdout, "%d\t%lf\n", i, sigbuf[i]);
+  /* if (nosc > DEFSFR) { */
+  /*   fprintf(stderr, "nosc before: %lu\n", nosc); */
+  /*   nosc = (double) (nosc + (nosc - (double) DEFSFR)); */
+  /*   fprintf(stderr, "size of new stuff: %lu\n", sizeof(*sigbuf)); */
+  /* } */
+
+  for (int i = 0; i < nosc; i++) {
+    /* fprintf(stderr, "the time array scale: %lf\n", *time[i]); */
+    *time[i] = (double)(i / ((double)(DEFSFR - 1)));
   }
+  /* fprintf(stderr, "the time array scale: %lf\n", *time[nosc]); */
+
+  for (int i = 0; i < nosc; i++) {
+    /* if (i < nosc/2) */
+    if (i % 2)
+      *sigbuf[i] = 2.0 * sinetick(*osc, 400);
+    if (i % 16)
+      *sigbuf[i] = 1.3 * sinetick(*osc, 40);
+    else
+      *sigbuf[i] = 1.0 * sinetick(*osc, 50);
+
+    /* fprintf(stdout, "%f\t%lf\n", *time[i], *sigbuf[i]); */
+    fprintf(stdout, "%lf\n", *sigbuf[i]);
+  }
+  goto exit;
 
   // NOTE::
   //        making a lookup table for a sine wave of 1024 length
@@ -147,20 +209,25 @@ int main(int argc, char *argv[]) {
   /*   printf("%lu\t%lf\n", i, table[i]); */
   /* } */
 
-  exit:
+exit:
   if (osc_amps)
     free(osc_amps);
   if (osc_freqs)
     free(osc_freqs);
   // NOTE:: free your own malloc brother
-  while (nsamps > 0) {
-    nsamps -= 1;
-    free(osc[nsamps]);
+  while (nosc > 0) {
+    nosc -= 1;
+    free(osc[nosc]);
+    free(sigbuf[nosc]);
+    free(time[nosc]);
   }
   if (*osc)
     free(osc);
-
+  if (*sigbuf || *time) {
+    free(sigbuf);
+    free(time);
+  }
   endt = clock();
-  double elapsed = (endt - startt) / (double) CLOCKS_PER_SEC;
+  double elapsed = (endt - startt) / (double)CLOCKS_PER_SEC;
   fprintf(stderr, "Time to procces was: %f [ms]\n", elapsed);
 }
