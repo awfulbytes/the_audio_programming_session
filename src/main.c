@@ -14,6 +14,7 @@
 #include "siggen.h"
 
 #define DEBUG -DDEBUG
+/* #define MUSIC -DMUSIC */
 /* #define MEMORY__DEBUG               -DDEBUG */
 #define TBLLEN (1024)
 #define DEFSFR (44100)
@@ -161,20 +162,29 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < nosc; i++) {
     /* fprintf(stderr, "the time array scale: %lf\n", *time[i]); */
     *time[i] = (double)(i / ((double)(DEFSFR - 1)));
+    // NOTE:: making the amplitute modulate exponentialy...
+    //               this means that we need some of the variable to make a
+    //               sweep but making it decay via the "-" sign or accending
+    //               otherwize.
+    osc_amps[i] = exp(i * 0.00003 * 0.2);
   }
   /* fprintf(stderr, "the time array scale: %lf\n", *time[nosc]); */
 
   for (int i = 0; i < nosc; i++) {
     /* if (i < nosc/2) */
     if (i % 2)
-      *sigbuf[i] = 2.0 * sinetick(*osc, 400);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 100);
     if (i % 16)
-      *sigbuf[i] = 1.3 * sinetick(*osc, 40);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 40);
     else
-      *sigbuf[i] = 1.0 * sinetick(*osc, 50);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 50);
 
-    /* fprintf(stdout, "%f\t%lf\n", *time[i], *sigbuf[i]); */
+#ifndef MUSIC
+    fprintf(stdout, "%f\t%lf\n", *time[i], *sigbuf[i]);
+#endif
+#ifdef MUSIC
     fprintf(stdout, "%lf\n", *sigbuf[i]);
+#endif
   }
   goto exit;
 
