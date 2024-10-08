@@ -63,6 +63,10 @@ int main(int argc, char *argv[]) {
   oscb_t **osc = NULL;
   double *osc_freqs = NULL, *osc_amps = NULL;
   /* double outframe[nsamps]; */
+  double dur = (double)nosc / (double)DEFSFR;
+  fprintf(stderr, "duration in seconds: %lf\n", dur);
+  double **sigbuf, **time = NULL;
+
 
   osc_amps = (double *)malloc(sizeof(double) * nosc);
   if (osc_amps == NULL) {
@@ -84,10 +88,6 @@ int main(int argc, char *argv[]) {
     error++;
     goto exit;
   }
-
-  double dur = (double)nosc / (double)DEFSFR;
-  fprintf(stderr, "duration in seconds: %lf\n", dur);
-  double **sigbuf, **time = NULL;
 
   sigbuf = (double **)malloc(sizeof(double *) * nosc);
   if (sigbuf == NULL) {
