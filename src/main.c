@@ -87,8 +87,7 @@ int main(int argc, char *argv[]) {
 
   double dur = (double)nosc / (double)DEFSFR;
   fprintf(stderr, "duration in seconds: %lf\n", dur);
-  double **sigbuf = NULL;
-  double **time = NULL;
+  double **sigbuf, **time = NULL;
 
   sigbuf = (double **)malloc(sizeof(double *) * nosc);
   if (sigbuf == NULL) {
