@@ -14,7 +14,7 @@
 #include "siggen.h"
 
 #define DEBUG -DDEBUG
-/* #define MUSIC -DMUSIC */
+#define MUSIC -DMUSIC
 /* #define MEMORY__DEBUG               -DDEBUG */
 #define TBLLEN (1024)
 #define DEFSFR (44100)
@@ -23,7 +23,7 @@
 /* enum { arg_progname, arg_samples, arg_srate, arg_amp, arg_freq, */
 /*         arg_nargs }; */
 
-int main(int argc, char *argv[]) {
+int main() {
   int error = 0;
   unsigned int nsamps;
   unsigned long nosc;
@@ -166,18 +166,25 @@ int main(int argc, char *argv[]) {
     //               this means that we need some of the variable to make a
     //               sweep but making it decay via the "-" sign or accending
     //               otherwize.
-    osc_amps[i] = exp(i * 0.00003 * 0.2);
+    //               ldexp(-i * 4e-5, 1)
+    //               NOTE::
+    //                      ramping up
+    //                      ldexp(-i * 4e-5, -1)
+    osc_amps[i] = 0.8 * exp(-i * 0.000008 * 0.2);
+    osc_freqs[i] = 66.6 * exp(i * 0.00003 * 0.2);
   }
   /* fprintf(stderr, "the time array scale: %lf\n", *time[nosc]); */
 
   for (int i = 0; i < nosc; i++) {
     /* if (i < nosc/2) */
     if (i % 2)
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 100);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
     if (i % 16)
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 40);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
+    if (i > nosc - 1400)
+      *sigbuf[i] = -osc_amps[i] * sinetick(*osc, 100);
     else
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, 50);
+      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
 
 #ifndef MUSIC
     fprintf(stdout, "%f\t%lf\n", *time[i], *sigbuf[i]);
