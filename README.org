@@ -1,0 +1,35 @@
+#+OPTIONS: toc:2
+
+* What you will need to build
+** build system
+The system uses /make/ and a Makefile for the most of the processing in order to
+compile the binary but we use the conditional compilation of the pre-processor
+for printing in different formats... When you need to create a audio file there
+is a problem. Printing the time array in the first column works when plotting
+but not when the output should be a mono channel (for monophonic oscillators).
+
+For that matter the flag '-DMUSIC' living in the main.c file will determine if
+the output will be for graph representation (commented out) or would be a single
+column to use it with the python script to produce a .bin file. Then ffmpeg will
+happily make a output.wav file in the root directory of the project.
+
+* compile commands
+To build the binary application which lives in the ./bin/ directory.
+#+begin_src bash
+cd root/proj/dir
+make clean && make
+#+end_src
+
+To build the binary output.bin file and use ffmpeg for the creation of the sound
+file which lives in the root directory.
+#+begin_src bash
+cd root/proj/dir
+make clean && make
+./bin/test > output.txt
+make music
+#+end_src
+* Changing the names of files...
+This should be obvious but modifying the name "output.txt" will give an error
+because skill issues (bored to find out how to use the file name as input).
+
+**modify** the Makefile if you want other naming scheme.
