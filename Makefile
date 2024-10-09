@@ -24,9 +24,12 @@ clean:
 	rm -rf ./*.bin
 	rm -rf ./*.wav
 
+-include confirm.inc
 music: $(TARGET)
 	@exec python ./tools/txt_to_bin.py
 	@exec ffmpeg -f f64le -ar 44100 -ac 1 -i input.bin output.wav
+	@exec make confirm
+	@exec $(play)
 
 bin_info: $(TARGET)
 	@exec echo -e "$(RED_BLD)information of spitted binary file$(NOC_BLD)\n"
@@ -44,3 +47,5 @@ debug_fuzz: $(FZOBJ)
 	afl-clang-fast -o $@ $? -lm
 fzobj/%.o: src/%.c
 	afl-clang-fast -c $< -o $@ -Iinc -Iventor/include -Iventor/portsf -Wno-implicit-function-declaration -g -Wall
+
+play := mpv output.wav
