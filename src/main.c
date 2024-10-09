@@ -147,18 +147,6 @@ int main() {
 
   startt = clock();
 
-  // TODO:: make the signal to be printed in seconds instead of the idx array.
-  //        here im able to determine the ammount of seconds a signal has
-  //        because i have the sampling frequency and the number of samples the
-  //        user gave... this is bad idea i have to determine the exact amount
-  //        of samples via the Niquist theorem of sf and aliasing... I see a lot
-  //        now...
-  /* if (nosc > DEFSFR) { */
-  /*   fprintf(stderr, "nosc before: %lu\n", nosc); */
-  /*   nosc = (double) (nosc + (nosc - (double) DEFSFR)); */
-  /*   fprintf(stderr, "size of new stuff: %lu\n", sizeof(*sigbuf)); */
-  /* } */
-
   for (int i = 0; i < nosc; i++) {
     /* fprintf(stderr, "the time array scale: %lf\n", *time[i]); */
     *time[i] = (double)(i / ((double)(DEFSFR - 1)));
