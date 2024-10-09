@@ -26,7 +26,7 @@ clean:
 
 music: $(TARGET)
 	@exec python ./tools/txt_to_bin.py
-	@exec ffmpeg -f f32le -ar 44100 -ac 1 -i input.bin output.wav
+	@exec ffmpeg -f f64le -ar 44100 -ac 1 -i input.bin output.wav
 
 bin_info: $(TARGET)
 	@exec echo -e "$(RED_BLD)information of spitted binary file$(NOC_BLD)\n"
