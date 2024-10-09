@@ -46,11 +46,12 @@ int main() {
   if ((int)nsamps <= 0) {
     fprintf(stderr, "The number should be possitive i.e. > 0: %d\n", nsamps);
     return -1;
-  } else if (nsamps > INT_MAX) {
-    fprintf(stderr,
-            "That is a big ass number the limit of the numbers posible to "
-            "handle are %d\n",
-            INT_MAX);
+  } else if (nsamps > 20 * DEFSFR) {
+    fprintf(
+        stderr,
+        "That is a big ass number the limit of the sample numbers posible to "
+        "handle are %d\n",
+        20 * DEFSFR);
     return -1;
   }
 
