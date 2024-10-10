@@ -2,6 +2,9 @@
 .cache
 *.wav
 *.mp3
+*.png
+*.gnu
+*.txt
 
 obj
 *test*
