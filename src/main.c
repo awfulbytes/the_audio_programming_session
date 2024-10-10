@@ -11,10 +11,11 @@
 #include <time.h>
 
 #include "oscB.h"
-#include "siggen.h"
+#include "main.h"
 
+#define SEMITN 2
 #define DEBUG -DDEBUG
-#define MUSIC -DMUSIC
+/* #define MUSIC -DMUSIC */
 /* #define MEMORY__DEBUG               -DDEBUG */
 #define TBLLEN (1024)
 #define DEFSFR (44100)
@@ -159,23 +160,28 @@ int main() {
     //               NOTE::
     //                      ramping up
     //                      ldexp(-i * 4e-5, -1)
-    osc_amps[i] = 0.8 * exp(-i * 0.000008 * 0.2);
-    osc_freqs[i] = 66.6 * exp(i * 0.00003 * 0.2);
+    /* osc_amps[i] = 0.8 * exp(-i * 0.000008 * 0.2); */
+    // 6.66 * exp(i * 0.00003 * exp(-0.0002))
+    /* osc_freqs[i] = (double) 440 / (double) SEMITN * pow(i, 0.02); */
+    osc_freqs[i] = 20.0;
+    osc_amps[i] = dbelling(1.3);
   }
   /* fprintf(stderr, "the time array scale: %lf\n", *time[nosc]); */
+  tickfunc ticker = sqtick;
 
   for (int i = 0; i < nosc; i++) {
     /* if (i < nosc/2) */
-    if (i % 2)
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
-    if (i % 16)
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
-    if (i > nosc - 1400)
-      *sigbuf[i] = -osc_amps[i] * sinetick(*osc, 100);
-    else
-      *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]);
+    /* if (i % 2) */
+    /*   *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]); */
+    /* if (i % 16) */
+    /*   *sigbuf[i] = osc_amps[i] * sinetick(*osc, osc_freqs[i]); */
+    /* if (i > nosc - 4400) */
+    /*   *sigbuf[i] = -osc_amps[i] * sinetick(*osc, 100); */
+    /* else */
+    *sigbuf[i] = osc_amps[i] * (ticker(*osc, osc_freqs[i]));
 
 #ifndef MUSIC
+    /* fprintf(stdout, "%f\t%lf\n", osc_freqs[i], *sigbuf[i]); */
     fprintf(stdout, "%f\t%lf\n", *time[i], *sigbuf[i]);
 #endif
 #ifdef MUSIC
